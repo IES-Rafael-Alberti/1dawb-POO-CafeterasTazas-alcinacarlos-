@@ -41,7 +41,6 @@ La sobrecarga de métodos facilita la legibilidad del código y proporciona flex
 método para realizar operaciones similares pero con diferentes conjuntos de datos.
 
 */
-import kotlin.random.Random
 class Taza(var color:Color = Color.Blanco, var capacidad: Int = 50){
     var cantidad = 0
         get() = field
@@ -150,8 +149,8 @@ fun main() {
 
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras y las tazas.
-    cafeteras.forEach(){ println(it)}
-    listaTazas.forEach() { println(it)}
+    cafeteras.forEach{ println(it)}
+    listaTazas.forEach{ println(it)}
 
     println("**********************************************")
     println("Llenar la cafetera1 de café...")
@@ -173,7 +172,7 @@ fun main() {
 
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras
-    cafeteras.forEach(){ println(it)}
+    cafeteras.forEach{ println(it)}
 
     println("**********************************************")
     println("Servir café en las tazas...")
@@ -187,7 +186,7 @@ fun main() {
 
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras y las tazas.
-    cafeteras.forEach(){ println(it)}
-    listaTazas.forEach() { println(it)}
+    cafeteras.forEach{ println(it)}
+    listaTazas.forEach { println(it)}
 
 }
