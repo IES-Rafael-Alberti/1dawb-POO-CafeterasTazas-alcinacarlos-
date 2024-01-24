@@ -41,19 +41,118 @@ La sobrecarga de métodos facilita la legibilidad del código y proporciona flex
 método para realizar operaciones similares pero con diferentes conjuntos de datos.
 
 */
+import kotlin.random.Random
+class Taza(var color:Color = Color.Blanco, var capacidad: Int = 50){
+    var cantidad = 0
+        get() = field
+        set(value) {
+            if (value>capacidad){
+                field = capacidad
+            }else{
+                field = value
+            }
+        }
+    enum class Color{
+        Blanco, Negro, Gris, Azul, Verde
+    }
+    fun llenar(){
+        cantidad = capacidad
+    }
+    fun llenar(cantidad: Int){
+        this.cantidad += cantidad
+    }
+
+    override fun toString(): String {
+        return "Taza(color = $color, capacidad = $capacidad c.c., cantidad = $cantidad c.c.)"
+    }
+}
+
+class Cafetera(var ubicacion: String){
+    companion object{
+        const val CAPACIDAD_MAXIMA = 1000
+    }
+    var capacidad:Int = CAPACIDAD_MAXIMA
+    var cantidad = 0
+        get() = field
+        set(value) {
+            if (value>capacidad){
+                field = capacidad
+            }else{
+                field = value
+            }
+        }
+    constructor(ubicacion:String, capacidad: Int): this(ubicacion){
+        this.ubicacion = ubicacion
+        this.capacidad = capacidad
+        this.cantidad = CAPACIDAD_MAXIMA
+    }
+
+    constructor(ubicacion: String, cantidad: Int, capacidad:Int): this(ubicacion){
+        if (cantidad >= CAPACIDAD_MAXIMA){
+            this.cantidad = CAPACIDAD_MAXIMA
+        } else{
+            this.cantidad = cantidad
+        }
+        this.capacidad = capacidad
+    }
+    init{
+        require(capacidad > 0 || capacidad < CAPACIDAD_MAXIMA) {"La capacidad tiene que estar entre 0 y 1000"}
+    }
+    fun llenar(){
+        this.cantidad = this.capacidad
+    }
+    fun vaciar(){
+        this.cantidad = 0
+    }
+    fun agragarCafe(cafe:Int = 200){
+        if (cafe > CAPACIDAD_MAXIMA){
+            this.cantidad = CAPACIDAD_MAXIMA
+        }else{
+            this.cantidad += cafe
+        }
+    }
+    fun servirTaza(taza:Taza){
+        if (taza.capacidad > cantidad){
+            taza.llenar(cantidad)
+            cantidad = 0
+        }else{
+            taza.llenar()
+            cantidad -= taza.capacidad
+        }
+    }
+
+    override fun toString(): String {
+        return "Cafetera(ubicación = $ubicacion, capacidad = $capacidad c.c., cantidad = $cantidad c.c.)"
+    }
+}
+
+
 
 fun main() {
 
     //TODO: Crear 3 cafeteras en la Sala, Cocina y Oficina
+    var cafetera1 = Cafetera("Sala")
+    var cafetera2 = Cafetera("Cocina", 750)
+    var cafetera3 =Cafetera("Oficina", 200, 500)
+    var cafeteras = mutableListOf(cafetera1, cafetera2, cafetera3)
 
 
     //TODO: Crear una lista de 20 tazas con capacidades aleatorias
+    var listaTazas = mutableListOf<Taza>()
+    val capacidadTazas = intArrayOf(50, 75, 100)
+    for (i in 1..20){
+        val taza = Taza(
+            color = Taza.Color.values().random(),
+            capacidad = capacidadTazas.random()
+        )
+        listaTazas.add(taza)
+    }
 
-   
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras y las tazas.
+    cafeteras.forEach(){ println(it)}
+    listaTazas.forEach() { println(it)}
 
-    
     println("**********************************************")
     println("Llenar la cafetera1 de café...")
     println("Vaciar la cafetera2...")
@@ -61,29 +160,34 @@ fun main() {
     println("Agregar 400 c.c. de café a la cafereta3...")
 
     //TODO: Llenar la cafetera1 de café.
-
+    cafeteras[0].llenar()
 
     //TODO: Vaciar la cafetera2.
-
+    cafeteras[1].vaciar()
 
     //TODO: Agregar café a la cafetera2 a la mitad de su capacidad.
-
+    cafeteras[1].agragarCafe(cafeteras[1].capacidad/2)
 
     //TODO: Agregar 400 c.c. de café a la cafereta3
-
+    cafeteras[2].agragarCafe(400)
 
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras
-
+    cafeteras.forEach(){ println(it)}
 
     println("**********************************************")
     println("Servir café en las tazas...")
 
     //TODO: Servir café en las tazas... siempre que haya café en la cafetera y en el orden cafetera1, cafetera2 y cafetera3.
-
+    for (cafetera in cafeteras){
+        for (taza in listaTazas){
+            cafetera.servirTaza(taza)
+        }
+    }
 
     println("**********************************************")
     //TODO: Mostrar por pantalla el contenido de las 3 cafeteras y las tazas.
-
+    cafeteras.forEach(){ println(it)}
+    listaTazas.forEach() { println(it)}
 
 }
